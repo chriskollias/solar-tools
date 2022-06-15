@@ -1,7 +1,8 @@
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
-from solar_tools.settings import API_KEY, FULL_NAME, REASON_FOR_USE, AFFILIATION, EMAIL, MAILING_LIST, UTC
+from solar_tools.settings import API_KEY, FULL_NAME, REASON_FOR_USE, AFFILIATION, EMAIL, MAILING_LIST, UTC, MEDIA_ROOT
 
 '''
 # Declare all variables as strings. Spaces must be replaced with '+', i.e., change 'John Smith' to 'John+Smith'.
@@ -35,7 +36,7 @@ def retrieve_data_from_api(lat, lon, year, interval, leap_year, attributes):
 
 
 def display_csv_graph(monthly_averages):
-    plt.figure(figsize=(3, 3))
+    plt.figure(figsize=(8, 8))
 
     plt.xlabel('Month', fontsize=8)
     plt.xticks(range(1, 13), fontsize=8)
@@ -50,9 +51,13 @@ def display_csv_graph(monthly_averages):
     line3.set_label('DNI')
 
     plt.legend(prop={'size': 6})
+    plt.title('Average Monthly Solar Irradiance')
     plt.tight_layout()
     filename = 'graph.png'
-    return filename
+    relative_img_filepath = f'graph_imgs/{filename}'
+    abs_img_filepath = os.path.join(MEDIA_ROOT, relative_img_filepath)
+    plt.savefig(abs_img_filepath)
+    return relative_img_filepath
 
 
 def load_raw_df(filepath):
@@ -83,7 +88,7 @@ def clean_raw_df(raw_df):
          'Solar Zenith Angle': 'float64'})
 
     # clean up the metadata
-    metadata = clean_metadata(metadata_row)
+    metadata = clean_metadata(metadata_row.to_dict())
 
     return metadata, df
 
