@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import IrradGraphInputs
+from .models import IrradGraph
 
-# Register your models here.
-admin.site.register(IrradGraphInputs)
+
+admin.site.register(IrradGraph)
