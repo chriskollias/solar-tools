@@ -17,80 +17,83 @@ utc = 'false'
 '''
 
 
-class NREL_API():
+def calc_monthly_averages(df):
+    # Calculate monthly averages and put them in new dataframe
+    monthly_averages = df.groupby(['Month']).mean()
+    return monthly_averages
 
-    def get_monthly_averages(self, lat_input, long_input, year_input, attributes_input):
-        lat, lon = lat_input, long_input
-        year = year_input
 
-        # Set leap year to true or false. True will return leap day data if present, false will not.
-        leap_year = 'false'
+def retrieve_data_from_api(lat, lon, year, interval, leap_year, attributes):
+    # Declare url string
+    url = f'http://developer.nrel.gov/api/solar/nsrdb_psm3_download.csv?wkt=POINT({lon}%20{lat})&names={year}&leap_day={leap_year}&interval={interval}&utc={UTC}&full_name={FULL_NAME}&email={EMAIL}&affiliation={AFFILIATION}&mailing_list={MAILING_LIST}&reason={REASON_FOR_USE}&api_key={API_KEY}&attributes={attributes}'
+    print(url)
+    df = pd.read_csv(url, nrows=20000)
+    timestr = time.strftime("%Y%m%d%H%M%S")
+    filename = 'solar_info' + timestr + '.csv'
+    df.to_csv(filename)
+    return filename
 
-        # Set time interval in minutes, i.e., '30' is half hour intervals. Valid intervals are 30 & 60.
-        interval = '30'
 
-        # Set the attributes to extract (e.g., dhi, ghi, etc.), separated by commas.
-        attributes = attributes_input
+def display_csv_graph(monthly_averages):
+    plt.figure(figsize=(3, 3))
 
-        # Uncomment to pull from API
-        solar_data_csv = self.__retrieve_data_from_api(lat, lon, year, interval, leap_year, attributes)
-        df = pd.read_csv(solar_data_csv)
+    plt.xlabel('Month', fontsize=8)
+    plt.xticks(range(1, 13), fontsize=8)
+    plt.ylabel('Irradiance W/m^2', fontsize=8)
 
-        # For testing
-        # df = pd.read_csv('solar_info20200228184632.csv')
+    line1, = plt.plot(monthly_averages.GHI, label='GHI')
+    line2, = plt.plot(monthly_averages.DHI, label='DHI')
+    line3, = plt.plot(monthly_averages.DNI, label='DNI')
 
-        graph_image = self.__display_csv_graph(df)
+    line1.set_label('GHI')
+    line2.set_label('DHI')
+    line3.set_label('DNI')
 
-        return graph_image
+    plt.legend(prop={'size': 6})
+    plt.tight_layout()
+    filename = 'graph.png'
+    return filename
 
-    def __retrieve_data_from_api(self, lat, lon, year, interval, leap_year, attributes):
-        # Declare url string
-        url = f'http://developer.nrel.gov/api/solar/nsrdb_psm3_download.csv?wkt=POINT({lon}%20{lat})&names={year}&leap_day={leap_year}&interval={interval}&utc={UTC}&full_name={FULL_NAME}&email={EMAIL}&affiliation={AFFILIATION}&mailing_list={MAILING_LIST}&reason={REASON_FOR_USE}&api_key={API_KEY}&attributes={attributes}'
-        print(url)
-        df = pd.read_csv(url, nrows=20000)
-        timestr = time.strftime("%Y%m%d%H%M%S")
-        filename = 'solar_info' + timestr + '.csv'
-        df.to_csv(filename)
-        return filename
 
-    def __display_csv_graph(self, df):
-        real_columns = df.iloc[1, :11]
+def load_raw_df(filepath):
+    raw_df = pd.read_csv(filepath)
+    return raw_df
 
-        new_df = pd.DataFrame(columns=real_columns)
 
-        temp_df = df.iloc[2:, :11]
-        temp_df.columns = new_df.columns
-        new_df = pd.concat([new_df, temp_df])
+def clean_raw_df(raw_df):
+    """
+    clean up the raw dataframe as it is given from the NREL API
+    """
+    # the first row contains metadata about the requested info
+    metadata_row = raw_df.iloc[0, :]
 
-        # Change the column datatypes to float32
-        new_df = new_df.astype('float32')
+    # the second row contains the actual column names
+    column_names = raw_df.iloc[1, 1:12].values
 
-        # Calculate monthly averages and put them in new dataframe
-        monthly_averages = new_df.groupby(['Month']).mean()
+    # extract the main body of the data from the raw_df
+    data_body = raw_df.iloc[2:, 1:12]
 
-        # TODO: Figure out why we have to do this
-        monthly_averages.to_csv('help.csv')
-        monthly_averages = pd.read_csv('help.csv')
+    # set the data_body's columns to match the extracted column_names
+    data_body.columns = column_names
 
-        plt.figure(figsize=(3, 3))
+    # create a new df that contains the data body now with the correct column names and correct dtypes
+    df = pd.DataFrame(data_body, columns=column_names).astype(
+        {'Year': 'int64', 'Month': 'int64', 'Day': 'int64', 'Hour': 'int64', 'Minute': 'int64', 'GHI': 'float64',
+         'DHI': 'float64', 'DNI': 'float64', 'Wind Speed': 'float64', 'Temperature': 'float64',
+         'Solar Zenith Angle': 'float64'})
 
-        plt.xlabel('Month', fontsize=8)
-        plt.xticks(range(1, 13), fontsize=8)
-        plt.ylabel('Irradiance W/m^2', fontsize=8)
+    # clean up the metadata
+    metadata = clean_metadata(metadata_row)
 
-        line1, = plt.plot(monthly_averages.Month, monthly_averages.GHI, label='GHI')
-        line2, = plt.plot(monthly_averages.Month, monthly_averages.DHI, label='DHI')
-        line3, = plt.plot(monthly_averages.Month, monthly_averages.DNI, label='DNI')
+    return metadata, df
 
-        line1.set_label('GHI')
-        line2.set_label('DHI')
-        line3.set_label('DNI')
 
-        plt.legend(prop={'size': 6})
-        plt.tight_layout()
-        filename = 'graph.png'
-        return filename
+def clean_metadata(raw_metadata):
+    """
+    clean up the metadata by only extracting the fields we want
+    """
+    metadata = {'source': raw_metadata['Source'], 'location_id': raw_metadata['Location ID'],
+                'lat': raw_metadata['Latitude'], 'lon': raw_metadata['Longitude'],
+                'time_zone': raw_metadata['Time Zone'], 'elevation': raw_metadata['Elevation']}
 
-    def __init__(self):
-        pass
-
+    return metadata
