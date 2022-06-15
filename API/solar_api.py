@@ -81,4 +81,19 @@ def clean_raw_df(raw_df):
         {'Year': 'int64', 'Month': 'int64', 'Day': 'int64', 'Hour': 'int64', 'Minute': 'int64', 'GHI': 'float64',
          'DHI': 'float64', 'DNI': 'float64', 'Wind Speed': 'float64', 'Temperature': 'float64',
          'Solar Zenith Angle': 'float64'})
-    return metadata_row, df
+
+    # clean up the metadata
+    metadata = clean_metadata(metadata_row)
+
+    return metadata, df
+
+
+def clean_metadata(raw_metadata):
+    """
+    clean up the metadata by only extracting the fields we want
+    """
+    metadata = {'source': raw_metadata['Source'], 'location_id': raw_metadata['Location ID'],
+                'lat': raw_metadata['Latitude'], 'lon': raw_metadata['Longitude'],
+                'time_zone': raw_metadata['Time Zone'], 'elevation': raw_metadata['Elevation']}
+
+    return metadata
