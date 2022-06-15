@@ -6,20 +6,34 @@
 </head>
 <body>
 {% block content %}
+{% load graph_tags %}
+
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p}}
 
     <input type="submit" value="Submit">
 </form>
-<p>
-    {% if obj %}
-        {% if obj.image.url %}
-            <img src="{{ obj.image.url }}">
+<div class="main-container" style="display: flex;">
+    <div>
+        {% if obj %}
+            {% if obj.image.url %}
+                <img src="{{ obj.image.url }}">
+            {% endif %}
         {% endif %}
-    {% endif %}
-</p>
-
+    </div>
+    <div class="metadata-container" style="margin-top: 2rem">
+        <h1>Metadata</h1>
+        {% autoescape off %}
+            <div>{{ metadata|display_metadata }}</div>
+        {% endautoescape %}
+    </div>
+</div>
+<div>
+    <br>
+    <br>
+    <br>
+</div>
 {% endblock content %}
 </body>
 </html>
