@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Solar Irradiance Graphing Tool</title>
+</head>
+<body>
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p}}
+
+    <input type="submit" value="Submit">
+</form>
+<p>
+    {% if obj %}
+        {% if obj.image.url %}
+            <img src="{{ obj.image.url }}">
+        {% endif %}
+    {% endif %}
+</p>
+
+{% endblock content %}
+</body>
+</html>
