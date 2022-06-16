@@ -6,6 +6,7 @@ class IrradGraph(models.Model):
     long = models.DecimalField(max_digits=7, decimal_places=4)
     year = models.IntegerField()
     image = models.ImageField(upload_to='irrad_graph', null=True, blank=True)
+    metadata = models.JSONField(null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'IrradGraphs'
