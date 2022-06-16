@@ -1,10 +1,11 @@
 from django import forms
-from .models import IrradGraph
+from API.solar_api import COORD_DECIMAL_PLACES
+from irrad_graph.models import IrradGraph
 
 
 class LatLongForm(forms.Form):
-    lat = forms.DecimalField(label="Latitude (test with 33.21)")
-    long = forms.DecimalField(label="Longitude (test with -97.14)")
+    lat = forms.DecimalField(label="Latitude", decimal_places=COORD_DECIMAL_PLACES)
+    long = forms.DecimalField(label="Longitude", decimal_places=COORD_DECIMAL_PLACES)
     year = forms.IntegerField(label="Year", min_value=1998, max_value=2014)
 
     class Meta:

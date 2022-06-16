@@ -1,6 +1,4 @@
-import os
 from django.db import models
-from solar_tools.settings import MEDIA_ROOT
 
 
 class IrradGraph(models.Model):
