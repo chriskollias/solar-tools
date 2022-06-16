@@ -4,8 +4,8 @@ from solar_tools.settings import MEDIA_ROOT
 
 
 class IrradGraph(models.Model):
-    lat = models.DecimalField(max_digits=7, decimal_places=4)
-    long = models.DecimalField(max_digits=7, decimal_places=4)
+    lat = models.DecimalField(max_digits=5, decimal_places=2)
+    long = models.DecimalField(max_digits=5, decimal_places=2)
     year = models.IntegerField()
     image = models.ImageField(upload_to='media/graph_imgs', null=True, blank=True)
     metadata = models.JSONField(null=True, blank=True)
