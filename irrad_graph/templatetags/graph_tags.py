@@ -12,8 +12,9 @@ def display_metadata(metadata):
             <li>Source: {metadata['source']}</li>
             <li>Latitude: {metadata['lat']}</li>
             <li>Longitude: {metadata['lon']}</li>
+            <li>Year: {metadata['year']}</li>
             <li>NREL Location ID: {metadata['location_id']}</li>
-            <li>Timezone: UTC {metadata['time_zone']}</li>
+            <li>Timezone: UTC{metadata['time_zone']}</li>
             <li>Elevation: {metadata['elevation']} feet</li>
         """
 

@@ -14,21 +14,21 @@
 
     <input type="submit" value="Submit">
 </form>
-<div class="main-container" style="display: flex;">
-    <div>
-        {% if obj %}
+{% if obj %}
+    <div class="main-container" style="display: flex;">
+        <div>
             {% if obj.image.url %}
                 <img src="{{ obj.image.url }}">
             {% endif %}
-        {% endif %}
+        </div>
+        <div class="metadata-container" style="margin-top: 2rem">
+            <h1>Metadata</h1>
+            {% autoescape off %}
+                <div>{{ obj.metadata|display_metadata }}</div>
+            {% endautoescape %}
+        </div>
     </div>
-    <div class="metadata-container" style="margin-top: 2rem">
-        <h1>Metadata</h1>
-        {% autoescape off %}
-            <div>{{ obj.metadata|display_metadata }}</div>
-        {% endautoescape %}
-    </div>
-</div>
+{% endif %}
 <div>
     <br>
     <br>

@@ -1,8 +1,6 @@
-from datetime import datetime
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-import time
 from solar_tools.settings import API_KEY, FULL_NAME, REASON_FOR_USE, AFFILIATION, EMAIL, MAILING_LIST, UTC, MEDIA_ROOT
 
 '''
@@ -18,6 +16,9 @@ utc = 'false'
 
 '''
 
+# the number of decimal places that the API can handle with respect to lat/long coords
+COORD_DECIMAL_PLACES = 2
+
 
 def calc_monthly_averages(df):
     # Calculate monthly averages and put them in new dataframe
@@ -25,15 +26,14 @@ def calc_monthly_averages(df):
     return monthly_averages
 
 
-def retrieve_data_from_api(lat, long, year, interval, leap_year, attributes):
+def retrieve_data_from_api(lat, long, year, interval=30, leap_year='false', attributes='ghi,dhi,dni,wind_speed,air_temperature,solar_zenith_angle'):
     # Declare url string
     url = f'http://developer.nrel.gov/api/solar/nsrdb_psm3_download.csv?wkt=POINT({long}%20{lat})&names={year}&leap_day={leap_year}&interval={interval}&utc={UTC}&full_name={FULL_NAME}&email={EMAIL}&affiliation={AFFILIATION}&mailing_list={MAILING_LIST}&reason={REASON_FOR_USE}&api_key={API_KEY}&attributes={attributes}'
-    print(url)
     df = pd.read_csv(url, nrows=20000)
-    timestr = time.strftime("%Y%m%d%H%M%S")
-    filename = 'solar_info' + timestr + '.csv'
-    df.to_csv(filename)
-    return filename
+    csv_filename = f'solar_info_{lat}_{long}_{year}.csv'
+    csv_filepath = os.path.join(MEDIA_ROOT, 'csv', csv_filename)
+    df.to_csv(csv_filepath)
+    return csv_filepath
 
 
 def display_csv_graph(monthly_averages, lat, long, year):
@@ -52,7 +52,7 @@ def display_csv_graph(monthly_averages, lat, long, year):
     line3.set_label('DNI')
 
     plt.legend(prop={'size': 6})
-    plt.title('Average Monthly Solar Irradiance')
+    plt.title(f'Average Monthly Solar Irradiance ({year})')
     plt.tight_layout()
     filename = f'{lat}_{long}_{year}_graph.png'
     relative_img_filepath = f'graph_imgs/{filename}'
@@ -66,7 +66,7 @@ def load_raw_df(filepath):
     return raw_df
 
 
-def clean_raw_df(raw_df):
+def clean_raw_df(raw_df, year):
     """
     clean up the raw dataframe as it is given from the NREL API
     """
@@ -90,6 +90,9 @@ def clean_raw_df(raw_df):
 
     # clean up the metadata
     metadata = clean_metadata(metadata_row.to_dict())
+
+    # add year to metadata
+    metadata['year'] = year
 
     return metadata, df
 
