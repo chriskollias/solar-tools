@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -24,9 +25,9 @@ def calc_monthly_averages(df):
     return monthly_averages
 
 
-def retrieve_data_from_api(lat, lon, year, interval, leap_year, attributes):
+def retrieve_data_from_api(lat, long, year, interval, leap_year, attributes):
     # Declare url string
-    url = f'http://developer.nrel.gov/api/solar/nsrdb_psm3_download.csv?wkt=POINT({lon}%20{lat})&names={year}&leap_day={leap_year}&interval={interval}&utc={UTC}&full_name={FULL_NAME}&email={EMAIL}&affiliation={AFFILIATION}&mailing_list={MAILING_LIST}&reason={REASON_FOR_USE}&api_key={API_KEY}&attributes={attributes}'
+    url = f'http://developer.nrel.gov/api/solar/nsrdb_psm3_download.csv?wkt=POINT({long}%20{lat})&names={year}&leap_day={leap_year}&interval={interval}&utc={UTC}&full_name={FULL_NAME}&email={EMAIL}&affiliation={AFFILIATION}&mailing_list={MAILING_LIST}&reason={REASON_FOR_USE}&api_key={API_KEY}&attributes={attributes}'
     print(url)
     df = pd.read_csv(url, nrows=20000)
     timestr = time.strftime("%Y%m%d%H%M%S")
@@ -35,7 +36,7 @@ def retrieve_data_from_api(lat, lon, year, interval, leap_year, attributes):
     return filename
 
 
-def display_csv_graph(monthly_averages):
+def display_csv_graph(monthly_averages, lat, long, year):
     plt.figure(figsize=(8, 8))
 
     plt.xlabel('Month', fontsize=8)
@@ -53,7 +54,7 @@ def display_csv_graph(monthly_averages):
     plt.legend(prop={'size': 6})
     plt.title('Average Monthly Solar Irradiance')
     plt.tight_layout()
-    filename = 'graph.png'
+    filename = f'{lat}_{long}_{year}_graph.png'
     relative_img_filepath = f'graph_imgs/{filename}'
     abs_img_filepath = os.path.join(MEDIA_ROOT, relative_img_filepath)
     plt.savefig(abs_img_filepath)
