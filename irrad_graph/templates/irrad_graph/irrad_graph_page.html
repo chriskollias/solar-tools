@@ -27,13 +27,12 @@
                 <div>{{ obj.metadata|display_metadata }}</div>
             {% endautoescape %}
         </div>
+        <div class="map-container">
+            <embed type="text/html" class="map-embed" src="media/map_htmls/35.25_-78.55_14_map.html" width="500" height="500">
+        </div>
     </div>
 {% endif %}
-<div>
-    <br>
-    <br>
-    <br>
-</div>
+<div class="footer" style="margin-top: 5rem"></div>
 {% endblock content %}
 </body>
 </html>

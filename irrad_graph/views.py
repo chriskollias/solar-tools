@@ -3,6 +3,7 @@ from .forms import LatLongForm
 from .models import IrradGraph
 
 from API.solar_api import clean_raw_df, load_raw_df, calc_monthly_averages, display_csv_graph, retrieve_data_from_api, COORD_DECIMAL_PLACES
+from maps.map_utils import generate_map_filename, check_if_map_file_exists, generate_map
 
 
 def irrad_graph_view(request, *args, **kwargs):
@@ -38,6 +39,15 @@ def irrad_graph_view(request, *args, **kwargs):
                 img_filepath = display_csv_graph(monthly_averages, lat=input_lat, long=input_long, year=input_year)
                 obj.image = img_filepath
                 obj.save()
+
+            # check if map file with this lat/long exists
+            map_filename = generate_map_filename(input_lat, input_long)
+            if check_if_map_file_exists(map_filename):
+                # figure out how we're displaying it
+                map_filepath = None
+            else:
+                # generate map file
+                map_filepath = generate_map(input_lat, input_long)
 
             context = {
                 'form': form,

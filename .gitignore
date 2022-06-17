@@ -5,3 +5,4 @@ db.sqlite3
 .env
 *.csv
 *.png
+media/map_htmls/*.html
