@@ -20,8 +20,14 @@ from django.conf.urls.static import static
 
 
 from irrad_graph import urls as irrad_graph_urls
+from pvlib_api import urls as pvlib_api_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # optional for rest framework's login and logout views
+    # ('api-auth/', include('rest_framework.urls')),
+
+    path('pvlib/', include(pvlib_api_urls)),
     path('', include(irrad_graph_urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

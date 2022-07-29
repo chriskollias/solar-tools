@@ -32,13 +32,19 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # default django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+
+    # ours
     'irrad_graph',
+    'pvlib_api',
 ]
 
 MIDDLEWARE = [
@@ -125,7 +131,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-# setup environmental variables
+# setup environmental variables (for NREL api stuff)
 load_dotenv()
 API_KEY = os.getenv('APIKEY')
 FULL_NAME = os.getenv('FULL_NAME')
