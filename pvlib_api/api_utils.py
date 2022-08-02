@@ -180,3 +180,10 @@ def setup_pv_system(latitude=32.2, longitude=-110.9):
     mc.run_model(weather)
 
     return mc.results
+
+
+# for cleaning the df containing all modules or inverters in from pvlib's CEC db
+def clean_all_modules_or_inverters_df(df):
+    df = df.transpose()
+    df.reset_index()
+    return df

@@ -26,7 +26,7 @@ SECRET_KEY = 'bp$@m&+kx)p)5f6ftql1$04ef(zm@3x%n32dfin5rdz-g$^e(+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # third party
     'rest_framework',
+    'corsheaders',
 
     # ours
     'irrad_graph',
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # auto-generated
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,6 +58,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # added for django-cors-headers
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'solar_tools.urls'
@@ -140,3 +146,7 @@ AFFILIATION = os.getenv('AFFILIATION')
 EMAIL = os.getenv('EMAIL')
 MAILING_LIST = os.getenv('MAILING_LIST')
 UTC = os.getenv('UTC')
+
+
+# Added for react frontend CORS issue
+CORS_ORIGIN_ALLOW_ALL = True
