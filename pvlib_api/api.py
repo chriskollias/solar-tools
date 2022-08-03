@@ -60,6 +60,19 @@ class PVSystemInfoAPIView(APIView):
         # runs the model on the combo of system, location, and weather
         mc.run_model(weather)
 
-        results = mc.results.__dict__
+        full_results = mc.results
+        print(f'full results:\n{full_results}\n\n')
 
-        return Response(results)
+        results_for_frontend = {
+            'aoi': mc.results.aoi.values[0],
+            'ac': mc.results.ac.values[0],
+            'i_sc': mc.results.dc.i_sc.values[0],
+            'i_mp': mc.results.dc.i_mp.values[0],
+            'v_oc': mc.results.dc.v_oc.values[0],
+            'v_mp': mc.results.dc.v_mp.values[0],
+            'p_mp': mc.results.dc.p_mp.values[0],
+            'i_x': mc.results.dc.i_x.values[0],
+            'i_xx': mc.results.dc.i_xx.values[0],
+        }
+
+        return Response(results_for_frontend)

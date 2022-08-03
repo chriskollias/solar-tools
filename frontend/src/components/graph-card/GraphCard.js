@@ -1,32 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import getGraphData from "./utils.js";
 
 export const GraphCard = () => {
   const [solarData, setSolarData] = useState(null);
 
   function handleClick() {
-    console.log("ENTERED handleClick()");
     const data = getGraphData();
-    setSolarData(data);
-    console.log("leaving handleClick with the following data");
-    console.log(data);
-    console.log("leaving handleClick with the following solarData");
-    console.log(solarData);
+    data.then((result) => setSolarData(result));
   }
 
-  if (solarData !== null && typeof myVariable !== "undefined") {
-    console.log("logging solarData...");
+  useEffect(() => {
+    console.log("useEffect()");
+  }, [solarData]);
+
+  if (solarData !== null && typeof solarData !== "undefined") {
+    console.log("solarData type");
+    console.log(typeof solarData);
+    console.log("solarData value");
     console.log(solarData);
-    return <div>{solarData}</div>;
-  } else {
+
+    let li_elements = [];
+
+    for (const key in solarData) {
+      let rowData = `${key}: ${solarData[key]}`;
+      let rowElement = <li key={key}>{rowData}</li>;
+      li_elements.push(rowElement);
+    }
+
     return (
       <div>
         <div>The graph itself would go here</div>
         <div>some text below it or something would go here</div>
+        <div>solar data would go here below:</div>
         <div>
-          <button onClick={handleClick}>Generate</button>
+          <ul>{li_elements}</ul>
         </div>
       </div>
     );
   }
+
+  return (
+    <div>
+      <div>The graph itself would go here</div>
+      <div>some text below it or something would go here</div>
+      <div>
+        <button onClick={handleClick}>Generate</button>
+      </div>
+    </div>
+  );
 };
