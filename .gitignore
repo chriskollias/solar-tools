@@ -26,6 +26,7 @@ build/
 venv/
 .idea/
 .env
+project_details/
 
 # npm and yarn logs
 npm-debug.log*
