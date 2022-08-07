@@ -13,3 +13,7 @@ Then enter them into the `.env` file, replacing any spaces with the `+` characte
 
 For example:
 `FULL_NAME=JANE+DOE`
+
+
+Template currently in use:
+http://www.mashup-template.com/assets/mountain/mountain-html.zip

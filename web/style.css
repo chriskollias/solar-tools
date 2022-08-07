@@ -1,0 +1,23 @@
+.green-text {
+	color: #368203 !important;
+	text-decoration: none;
+}
+
+h2::after {
+	color: #368203;
+}
+
+.fa-icon {
+	font-size: 75px;
+	color: #000;
+}
+
+#gh-link {
+	margin-left: 225px;
+}
+
+
+#solarpunk-city {
+	max-width:100%;
+	max-height:100%;
+}
