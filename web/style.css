@@ -21,3 +21,12 @@ h2::after {
 	max-width:100%;
 	max-height:100%;
 }
+
+a.green-text {
+	transition: all 0.1s;
+}
+
+a.green-text:hover {
+	color: #000 !important;
+	transform: scale(1.1);
+}
