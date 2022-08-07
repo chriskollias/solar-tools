@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # ours
-    'irrad_graph',
+    'graph',
     'pvlib_api',
 ]
 

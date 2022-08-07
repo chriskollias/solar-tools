@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .forms import LatLongForm
 from .models import IrradGraph
 
-from API.solar_api import clean_raw_df, load_raw_df, calc_monthly_averages, display_csv_graph, retrieve_data_from_api, COORD_DECIMAL_PLACES
+from nrel_api.solar_api import clean_raw_df, load_raw_df, calc_monthly_averages, display_csv_graph, retrieve_data_from_api, COORD_DECIMAL_PLACES
 
 
 def irrad_graph_view(request, *args, **kwargs):

@@ -1,6 +1,6 @@
 from django import forms
-from API.solar_api import COORD_DECIMAL_PLACES
-from irrad_graph.models import IrradGraph
+from nrel_api.solar_api import COORD_DECIMAL_PLACES
+from graph.models import IrradGraph
 
 
 class LatLongForm(forms.Form):

@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-from irrad_graph import urls as irrad_graph_urls
+from graph import urls as graph_urls
 from pvlib_api import urls as pvlib_api_urls
 
 urlpatterns = [
@@ -29,5 +29,5 @@ urlpatterns = [
     # ('api-auth/', include('rest_framework.urls')),
 
     path('pvlib/', include(pvlib_api_urls)),
-    path('', include(irrad_graph_urls)),
+    path('', include(graph_urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
