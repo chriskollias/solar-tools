@@ -16,6 +16,7 @@ utc = 'false'
 
 '''
 
+
 # the number of decimal places that the API can handle with respect to lat/long coords
 COORD_DECIMAL_PLACES = 2
 
@@ -64,37 +65,6 @@ def display_csv_graph(monthly_averages, lat, long, year):
 def load_raw_df(filepath):
     raw_df = pd.read_csv(filepath)
     return raw_df
-
-
-def clean_raw_df(raw_df, year):
-    """
-    clean up the raw dataframe as it is given from the NREL API
-    """
-    # the first row contains metadata about the requested info
-    metadata_row = raw_df.iloc[0, :]
-
-    # the second row contains the actual column names
-    column_names = raw_df.iloc[1, 1:12].values
-
-    # extract the main body of the data from the raw_df
-    data_body = raw_df.iloc[2:, 1:12]
-
-    # set the data_body's columns to match the extracted column_names
-    data_body.columns = column_names
-
-    # create a new df that contains the data body now with the correct column names and correct dtypes
-    df = pd.DataFrame(data_body, columns=column_names).astype(
-        {'Year': 'int64', 'Month': 'int64', 'Day': 'int64', 'Hour': 'int64', 'Minute': 'int64', 'GHI': 'float64',
-         'DHI': 'float64', 'DNI': 'float64', 'Wind Speed': 'float64', 'Temperature': 'float64',
-         'Solar Zenith Angle': 'float64'})
-
-    # clean up the metadata
-    metadata = clean_metadata(metadata_row.to_dict())
-
-    # add year to metadata
-    metadata['year'] = year
-
-    return metadata, df
 
 
 def clean_metadata(raw_metadata):
