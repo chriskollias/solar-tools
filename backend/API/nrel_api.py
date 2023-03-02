@@ -42,7 +42,7 @@ def get_data(wkt, attributes, names):
 
 def test_nrel_api():
     wkt = 'POINT(-108.5449 40.5137)'
-    names = '2018'     # 2018 - 2021
+    names = '2018'
     attributes = 'air_temperature,clearsky_dhi,clearsky_dni,clearsky_ghi,cloud_type,dew_point,dhi,dni,fill_flag,ghi,relative_humidity,solar_zenith_angle,surface_albedo,surface_pressure,total_precipitable_water,wind_direction,wind_speed'
 
     response = get_data(wkt, attributes, names)
