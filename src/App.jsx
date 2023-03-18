@@ -1,10 +1,21 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import { getNRELDataRequest } from './requests/requests'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const handleClick = () => {
+    const response = getNRELDataRequest({
+      "lat": "40.5137",
+      "lon": "-108.5449"
+    })
+    .then(response => {
+      console.log("printing response")
+      console.log(response)    
+    })
+  }
 
   return (
     <div className="App">
@@ -18,8 +29,8 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <button onClick={() => handleClick()}>
+          count is over
         </button>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
