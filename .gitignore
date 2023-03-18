@@ -1,38 +1,32 @@
-# user-uploaded or generated files
-*.csv
-*.png
-
-# backend
-*.pyc
-db.sqlite3
-
-# frontend dependencies
-node_modules/
-*.pnp
-*.pnp.js
-
-# frontend testing
-coverage/
-
-# frontend production
-build/
-
-# development environment
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-venv/
-.idea/
-.env
-project_details/
-
-# npm and yarn logs
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# pvlib
-pvlib-python/
+node_modules
+dist
+dist-ssr
+*.local
 
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Backend
+*.sqlite3
+.env
+__pycache__
+
+# User generated files
+*.csv
