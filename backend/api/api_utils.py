@@ -40,3 +40,9 @@ def clean_raw_df(raw_df):
     """
      
     return df, metadata
+
+
+def calc_monthly_averages(df):
+    # Calculate monthly averages and put them in new dataframe
+    monthly_averages_df = df.groupby(['Month']).mean()
+    return monthly_averages_df
