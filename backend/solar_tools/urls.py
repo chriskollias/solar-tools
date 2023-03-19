@@ -29,5 +29,6 @@ urlpatterns = [
     # ('api-auth/', include('rest_framework.urls')),
 
     path('pvlib/', include(pvlib_api_urls)),
+    path('api/', include("api.urls")),
     path('', include(irrad_graph_urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
