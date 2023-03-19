@@ -1,5 +1,5 @@
 export const GlobalStyles = {
-    colors: {
-      error: "#ff1100",
-    },
+  errorText: {
+    color: "#ff1100",
+  },
 }

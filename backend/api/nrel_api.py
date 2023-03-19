@@ -11,16 +11,17 @@ from .api_utils import format_request_url, clean_raw_df, calc_monthly_averages
 BASE_URL = "http://developer.nrel.gov"
 
 # csv or json
-RESPONSE_FORMAT = 'csv'  
+RESPONSE_FORMAT = 'csv'
 
-# using the Physical Solar Model (PSM) v3 - Five Minute Temporal Resolution 
+# using the Physical Solar Model (PSM) v3 - Five Minute Temporal Resolution
 # https://developer.nrel.gov/docs/solar/nsrdb/psm3-5min-download/
 ENDPOINT = f'/api/nsrdb/v2/solar/psm3-5min-download'
 
 
 def send_data_request(wkt, attributes, years):
-    request_url = format_request_url(BASE_URL, RESPONSE_FORMAT, ENDPOINT, api_key=API_KEY, wkt=wkt, attributes=attributes, names=years, utc="true", leap_day="true", interval=30, full_name=FULL_NAME, email=EMAIL, affiliation=AFFILIATION, reason=REASON_FOR_USE, mailing_list=MAILING_LIST)
-    
+    request_url = format_request_url(BASE_URL, RESPONSE_FORMAT, ENDPOINT, api_key=API_KEY, wkt=wkt, attributes=attributes, names=years, utc="true",
+                                     leap_day="true", interval=30, full_name=FULL_NAME, email=EMAIL, affiliation=AFFILIATION, reason=REASON_FOR_USE, mailing_list=MAILING_LIST)
+
     headers = {
         'content-type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache"
@@ -30,7 +31,7 @@ def send_data_request(wkt, attributes, years):
     # print(request_url)
 
     response = requests.request("GET", request_url, headers=headers)
-    
+
     if response.ok:
         df = pd.read_csv(io.StringIO(response.text))
         df, metadata = clean_raw_df(df)
@@ -57,7 +58,6 @@ def send_data_request(wkt, attributes, years):
         }
 
 
-
 class NRELAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -73,7 +73,7 @@ class NRELAPIView(APIView):
         # TODO just hardcoding these in for now
         years = '2018'
         attributes = 'air_temperature,clearsky_dhi,clearsky_dni,clearsky_ghi,cloud_type,dew_point,dhi,dni,fill_flag,ghi,relative_humidity,solar_zenith_angle,surface_albedo,surface_pressure,total_precipitable_water,wind_direction,wind_speed'
-        
+
         nrel_response_data = send_data_request(wkt_string, attributes, years)
 
         # TODO handle different error status codes differently
@@ -85,7 +85,9 @@ class NRELAPIView(APIView):
 
         # get new df w/ calculated monthly averages
         monthly_averages_df = calc_monthly_averages(df)
-        
+
+        df.to_csv('demo.csv')
+
         nrel_data = df.to_dict()
         return Response(nrel_data)
 

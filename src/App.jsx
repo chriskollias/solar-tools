@@ -3,13 +3,17 @@ import { getNRELDataRequest } from "./requests/requests";
 import InputForm from "./components/ui/InputForm";
 import ResultSummary from "./components/ResultSummary";
 import { Oval } from "react-loader-spinner";
+import { GlobalStyles } from "./constants/styles";
 
 function App() {
   const [requestPending, setRequestPending] = useState(false);
   const [solarData, setSolarData] = useState(null);
+  const [requestError, setRequestError] = useState(false);
 
   const submitForm = (lat, lon) => {
     setRequestPending(true);
+    setRequestError(false);
+    setSolarData(null);
     const response = getNRELDataRequest({
       lat: lat,
       lon: lon,
@@ -21,6 +25,8 @@ function App() {
         setSolarData(response.data);
       })
       .catch((error) => {
+        setRequestPending(false);
+        setRequestError(true);
         console.log("AN ERROR HAS OCCURRED");
         console.log(error);
       });
@@ -51,6 +57,11 @@ function App() {
           strokeWidth={2}
           strokeWidthSecondary={2}
         />
+      )}
+      {requestError && (
+        <div>
+          <span style={GlobalStyles.errorText}>An error has occurred.</span>
+        </div>
       )}
       {solarData && <ResultSummary solarData={solarData} />}
     </div>

@@ -1,6 +1,7 @@
 import pandas as pd
 from urllib.parse import urlencode
 
+
 def format_request_url(base_url, response_format, endpoint, **kwargs):
     request_url = f'{base_url}{endpoint}.{response_format}/?'
     query_params = urlencode(kwargs)
@@ -31,14 +32,14 @@ def clean_raw_df(raw_df):
 
     # create a new df that contains the data body now with the correct column names and correct dtypes
     df = pd.DataFrame(data_body, columns=columns)
-    
+
     """
     .astype(
         {'Year': 'int64', 'Month': 'int64', 'Day': 'int64', 'Hour': 'int64', 'Minute': 'int64', 'GHI': 'float64',
          'DHI': 'float64', 'DNI': 'float64', 'Wind Speed': 'float64', 'Temperature': 'float64',
          'Solar Zenith Angle': 'float64'})
     """
-     
+
     return df, metadata
 
 
