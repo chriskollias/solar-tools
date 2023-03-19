@@ -36,12 +36,13 @@ function App() {
   const initialLon = -108.5449;
 
   return (
-    <div>
+    <div style={{ margin: "8rem" }}>
       <div>
         <InputForm
           initialLat={initialLat}
           initialLon={initialLon}
           submitForm={submitForm}
+          buttonDisabled={requestPending}
         />
       </div>
       {requestPending && (

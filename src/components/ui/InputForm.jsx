@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const InputForm = ({ initialLat, initialLon, submitForm }) => {
+const InputForm = ({ initialLat, initialLon, submitForm, buttonDisabled }) => {
   const [lat, setLat] = useState(initialLat);
   const [lon, setLon] = useState(initialLon);
 
@@ -34,7 +34,11 @@ const InputForm = ({ initialLat, initialLon, submitForm }) => {
             onChange={(e) => setLon(e.target.value)}
           />
         </label>
-        <button type="submit">Submit</button>
+        <div>
+          <button type="submit" disabled={buttonDisabled ? true : false}>
+            Submit
+          </button>
+        </div>
       </div>
     </form>
   );
