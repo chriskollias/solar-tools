@@ -31,19 +31,25 @@ def clean_raw_df(raw_df):
     data_body.columns = columns
 
     # create a new df that contains the data body now with the correct column names and correct dtypes
-    df = pd.DataFrame(data_body, columns=columns)
+    df = pd.DataFrame(data_body, columns=columns).astype(
+        {'Year': 'int64', 'Month': 'int64', 'Day': 'int64', 'Hour': 'int64', 'Minute': 'int64', 'Temperature': 'float64',
+         'Clearsky GHI': 'float64', 'Clearsky DNI': 'float64', 'Clearsky DHI': 'float64', 'GHI': 'float64', 'DHI': 'float64',
+         'DNI': 'float64', 'Cloud Type': 'int64', 'Dew Point': 'float64', 'Fill Flag': 'int64', 'Relative Humidity': 'float64',
+         'Solar Zenith Angle': 'float64', 'Surface Albedo': 'float64', 'Pressure': 'float64', 'Precipitable Water': 'float64',
+         'Wind Direction': 'float64', 'Wind Speed': 'float64'})
 
-    """
-    .astype(
-        {'Year': 'int64', 'Month': 'int64', 'Day': 'int64', 'Hour': 'int64', 'Minute': 'int64', 'GHI': 'float64',
-         'DHI': 'float64', 'DNI': 'float64', 'Wind Speed': 'float64', 'Temperature': 'float64',
-         'Solar Zenith Angle': 'float64'})
-    """
+    # reset the cleaned df's index inplace, using the existing index col
+    df.reset_index(inplace=True, drop=True)
 
     return df, metadata
 
 
-def calc_monthly_averages(df):
-    # Calculate monthly averages and put them in new dataframe
-    monthly_averages_df = df.groupby(['Month']).mean()
-    return monthly_averages_df
+# organize all the data we want to send back to frontend
+def organize_response_data(df):
+    monthly_averages_df = df.groupby(['Month'])[['GHI', 'DNI', 'DHI']].mean()
+
+    return {
+        "monthly_ghi": monthly_averages_df['GHI'],
+        "monthly_dni": monthly_averages_df['DNI'],
+        "monthly_dhi": monthly_averages_df['DHI']
+    }
