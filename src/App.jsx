@@ -9,6 +9,7 @@ function App() {
   const [requestPending, setRequestPending] = useState(false);
   const [solarData, setSolarData] = useState(null);
   const [requestError, setRequestError] = useState(false);
+  const [requestErrorText, setRequestErrorText] = useState("");
 
   const submitForm = (lat, lon) => {
     setRequestPending(true);
@@ -29,6 +30,7 @@ function App() {
         setRequestError(true);
         console.log("AN ERROR HAS OCCURRED");
         console.log(error);
+        setRequestErrorText(error?.response?.data?.detail);
       });
   };
 
@@ -61,7 +63,9 @@ function App() {
       )}
       {requestError && (
         <div>
-          <span style={GlobalStyles.errorText}>An error has occurred.</span>
+          <span style={GlobalStyles.errorText}>
+            An error has occurred: {requestErrorText}
+          </span>
         </div>
       )}
       {solarData && <ResultSummary solarData={solarData} />}
