@@ -86,7 +86,7 @@ class NRELAPIView(APIView):
         # get new df w/ calculated monthly averages
         monthly_averages_df = calc_monthly_averages(df)
 
-        df.to_csv('demo.csv')
+        # df.to_csv('demo.csv')
 
         nrel_data = df.to_dict()
         return Response(nrel_data)

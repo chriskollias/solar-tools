@@ -40,6 +40,9 @@ def clean_raw_df(raw_df):
          'Solar Zenith Angle': 'float64'})
     """
 
+    # reset the cleaned df's index inplace, using the existing index col
+    df.reset_index(inplace=True, drop=True)
+
     return df, metadata
 
 
