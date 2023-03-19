@@ -45,12 +45,20 @@ def send_data_request(wkt, attributes, years):
             "error_description": "rate limit exceeded"
         }
     else:
-        print('other response problem')
-        print(response)
+        print('NREL response problem, printing response.text')
+        print(response.text, '\n')
+
+        errors = "Unknown error"
+        try:
+            errors = ", ".join(response.json()['errors'])
+        except:
+            print("Could not get errors from response json")
+            print(response.text, '\n')
+
         return {
             "error": True,
             "status_code": response.status_code,
-            "error_description": "other response problem"
+            "error_description": errors
         }
 
 
