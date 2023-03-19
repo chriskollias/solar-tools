@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from solar_tools.settings import API_KEY, FULL_NAME, REASON_FOR_USE, AFFILIATION, EMAIL, MAILING_LIST, UTC
-from .api_utils import format_request_url, clean_raw_df, calc_monthly_averages
+from .api_utils import format_request_url, clean_raw_df, organize_response_data
 
 BASE_URL = "http://developer.nrel.gov"
 
@@ -83,12 +83,9 @@ class NRELAPIView(APIView):
         # if not an error, turn the dataframe into a dict for the response
         df = nrel_response_data.get('df')
 
-        # get new df w/ calculated monthly averages
-        monthly_averages_df = calc_monthly_averages(df)
-
         # df.to_csv('demo.csv')
 
-        nrel_data = df.to_dict()
+        nrel_data = organize_response_data(df)
         return Response(nrel_data)
 
 
